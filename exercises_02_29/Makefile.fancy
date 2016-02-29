@@ -1,0 +1,17 @@
+all: paper.pdf
+
+paper.pdf: paper.tex Fig1/fig.pdf Fig2/fig.pdf
+	pdflatex paper
+
+Fig%/fig.pdf: Fig%/fig.R
+	cd $(<D);Rscript $(<F)
+
+clean:
+	rm -f paper.aux
+	rm -f paper.log
+	rm -f paper.synctex.gz
+	rm -f paper.pdf
+	rm -f Fig1/fig.pdf
+	rm -f Fig2/fig.pdf
+
+.PHONY: all clean
