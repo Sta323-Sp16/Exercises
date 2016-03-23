@@ -10,13 +10,6 @@ l = loess(y ~ x, data=d)
 pred_y = predict(l,data.frame(x=x))
 pred_y_se = predict(l,data.frame(x=x),se=TRUE)$se.fit
 
-#plot(x, y)
-#lines(x, pred_y)
-#lines(x, pred_y + 1.96 * pred_y_se, col='red')
-#lines(x, pred_y - 1.96 * pred_y_se, col='red')
-
-
-#Sys.setenv("OMP_NUM_THREADS"=1)
 
 n_rep = 10000
 system.time({
@@ -63,7 +56,17 @@ system.time({
 
 
 
-# Calculate the 95% bootstrap prediction interval
+
+
+# Origina loess fit with 95% confidence interval
+
+plot(x, y)
+lines(x, pred_y)
+lines(x, pred_y + 1.96 * pred_y_se, col='red')
+lines(x, pred_y - 1.96 * pred_y_se, col='red')
+
+
+# loess fit with 95% bootstrap prediction interval
 bsi = apply(res,1,quantile,probs=c(0.025,0.975), na.rm=TRUE)
 
 plot(x, y)
