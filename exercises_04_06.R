@@ -54,6 +54,11 @@ dim(r) = c(1000,200)
 r = rasterize(manh, r)
 
 
+pred_cells = which(r[] != 0)
+pred_locs = xyFromCell(r,pred_cells) %>% as.data.frame()
+
+
+
 ## Modeling - Logistic Regression
 
 pdata = data.frame(p = (d$precinct == 1), x = d$x, y = d$y)
@@ -134,5 +139,15 @@ pred_svm = r
 pred_svm[pred_cells] = predict(s, newdata=pred_loc)
 plot(pred_svm,asp=0)
 
+
+
+## Model output
+
+poly = rasterToPolygons(pred_xg, dissolve = TRUE)
+names(poly) = "Precinct"
+
+source("https://raw.githubusercontent.com/Sta323-Sp16/Homework/master/hw5/write_geojson.R")
+
+write_geojson(poly, "precincts.json")
 
 
